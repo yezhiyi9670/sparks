@@ -1,21 +1,28 @@
 {
-  "name": "test3",
-  "version": "1.0.0",
+  "name": "sparks-frontend",
+  "version": "0.0.1",
   "source": "./src/index.html",
   "license": "MIT",
   "scripts": {
     "start": "parcel --port 8544 --host localhost",
     "build": "parcel build --public-url ./"
   },
-  "browserslist": "> 0.5, last 2 versions, Firefox ESR, not dead",
+  "browserslist": "> 0.5%, last 2 versions, Firefox ESR, not dead",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.7.0",
+    "@parcel/transformer-sass": "^2.8.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
-    "parcel": "^2.7.0",
+    "parcel": "^2.8.0",
     "process": "^0.11.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sass": "^1.56.0"
+    "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@fontsource/roboto": "^4.5.8",
+    "@mui/material": "^5.10.14",
+    "react-icons": "^4.6.0",
+    "react-jss": "^10.9.2"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "name": "test3-backend",
-  "version": "1.0.0",
+  "name": "sparks-backend",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "app.ts",
   "scripts": {
