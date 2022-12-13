@@ -1,7 +1,8 @@
+import { iterateFirstKey, iterateSize } from '../../lib/util/array'
 import { AdaptiveColor, resolveAdaptiveColor, resolveColor } from '../../lib/util/color'
 import { createIssue, expectToken, Issue } from '../code/issue/issue'
 import { tokenize } from '../code/parser/tokenizer'
-import { TagItem, TagValue } from './tag'
+import { TagItem, TagValue, Tags } from './tag'
 
 export interface TagParseResult {
 	result: Tags
@@ -82,7 +83,7 @@ export function parseTags(code: string): TagParseResult {
 		}
 
 		let labelOrLprToken = tokens[currentStart]
-		let label = null
+		let label: string | null = null
 		currentStart += 1
 		if(labelOrLprToken.type == 'symbol') {
 			success &&= expectToken(
@@ -154,10 +155,10 @@ export function parseTags(code: string): TagParseResult {
 		let isMulti = baseToken.content == 'multitag'
 
 		let parseValues = function(issues: Issue[], start: number, end: number, isMulti: boolean): ValuesParseResult {
-			let externs = []
-			let inits = []
-			let color = null
-			let delimiter = null
+			let externs: string[] = []
+			let inits: string[] = []
+			let color: AdaptiveColor | null = null
+			let delimiter: string | null = null
 			let values: {[_:string]: TagValue} = {}
 			let nameChecks: {[_: string]: boolean} = {}
 			let hasVoid = false
@@ -247,7 +248,7 @@ export function parseTags(code: string): TagParseResult {
 					}
 
 					let labelToken = tokens[ptr++]
-					let labelText = null
+					let labelText: string | null = null
 					if(labelToken.type == 'stringLiteral') {
 						labelText = labelToken.content
 					} else {
@@ -277,6 +278,8 @@ export function parseTags(code: string): TagParseResult {
 					inits.push('void')
 				} else if(hasDefault) {
 					inits.push('default')
+				} else if(iterateSize(values) != 0) {
+					inits.push(iterateFirstKey(values))
 				} else {
 					issues.push(createIssue(
 						tokens[start].range[0], 'error',

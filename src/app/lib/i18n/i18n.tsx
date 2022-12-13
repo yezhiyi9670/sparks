@@ -9,6 +9,8 @@ interface I18nProviderProps {
 	languageKey: string
 }
 
+export type LanguageFunction = (key: string, ...args: any[]) => string
+
 /**
  * 提供多语言的上下文
  */

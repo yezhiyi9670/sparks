@@ -13,9 +13,10 @@ import { useMobile } from '../../lib/mobile/mobile'
 
 interface NavAppbarProps {
 	onMenuToggle: () => void
+	title?: string
 }
 
-export default function NavAppbar({ onMenuToggle, ...other }: NavAppbarProps) {
+export default function NavAppbar({ onMenuToggle, title, ...other }: NavAppbarProps) {
 	const LNG = useI18n()
 	const isMobile = useMobile()
 	
@@ -54,10 +55,10 @@ export default function NavAppbar({ onMenuToggle, ...other }: NavAppbarProps) {
 				>
 					<Icon.MdMenu />
 				</IconButton>
-				<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-					Sparks
+				<Typography variant="h6" component="div" sx={{ whiteSpace: 'nowrap', flexGrow: 1, flexShrink: 1, overflowX: 'hidden', textOverflow: 'ellipsis' }}>
+					{title ?? LNG('sparks')}
 				</Typography>
-				<div>
+				<div style={{whiteSpace: 'nowrap'}}>
 					<IconButton
 						size="large"
 						aria-label="toggle dark mode"
@@ -93,17 +94,17 @@ export default function NavAppbar({ onMenuToggle, ...other }: NavAppbarProps) {
 						open={Boolean(anchorEl)}
 						onClose={handleClose}
 					>
-						<MenuItem onClick={handleClose} sx={{fontWeight: 700}}>{LNG('nav.user.username', 'null')}</MenuItem>
+						{/* <MenuItem onClick={handleClose} sx={{fontWeight: 700}}>{LNG('nav.user.username', 'null')}</MenuItem>
 						<MenuItem onClick={handleClose}>{LNG('nav.user.account')}</MenuItem>
+						<MenuItem onClick={handleClose}>{LNG('nav.option.sync')}</MenuItem>
 						<MenuItem onClick={handleClose}>{LNG('nav.user.subscription')}</MenuItem>
 						<MenuItem onClick={handleClose}>{LNG('nav.user.logout')}</MenuItem>
-						<Divider sx={{my: 0.5}} />
+						<Divider sx={{my: 0.5}} /> */}
 						<MenuItem onClick={handleClose} sx={{fontWeight: 700}}>{LNG('nav.guest.username')}</MenuItem>
-						<MenuItem onClick={handleClose}>{LNG('nav.guest.login')}</MenuItem>
-						<MenuItem onClick={handleClose}>{LNG('nav.guest.register')}</MenuItem>
+						<MenuItem onClick={handleClose} disabled>{LNG('nav.guest.login')}</MenuItem>
+						<MenuItem onClick={handleClose} disabled>{LNG('nav.guest.register')}</MenuItem>
 						<Divider sx={{my: 0.5}} />
 						<MenuItem onClick={handleClose}>{LNG('nav.option.preferences')}</MenuItem>
-						<MenuItem onClick={handleClose}>{LNG('nav.option.sync')}</MenuItem>
 					</Menu>
 				</div>
 			</Toolbar>

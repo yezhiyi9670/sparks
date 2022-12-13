@@ -3,7 +3,7 @@ import React from 'react'
 import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
-	NavbarAppOutlet: {
+	AppbarOutlet: {
 		position: 'fixed',
 		left: 0,
 		right: 0,
@@ -13,19 +13,19 @@ const useStyles = createUseStyles({
 			top: 64
 		}
 	},
-	NavAppbarOutlet_inner: {
+	AppbarOutlet_inner: {
 		position: 'relative',
 		width: '100%',
 		height: '100%'
 	}
 })
 
-export default function NavAppbarOutlet({children, ...other}: {children?: React.ReactNode}) {
+export default function AppbarOutlet({children, ...other}: {children?: React.ReactNode}) {
 	const classes = useStyles()
 
 	return (
-		<div className={classes.NavbarAppOutlet} {...other}>
-			<div className={classes.NavAppbarOutlet_inner}>
+		<div className={classes.AppbarOutlet} {...other}>
+			<div className={classes.AppbarOutlet_inner}>
 				{children}
 			</div>
 		</div>

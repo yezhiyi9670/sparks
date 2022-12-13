@@ -162,7 +162,7 @@ export function tokenize(code: string, options: TokenizerOption = TokenizerOptio
 						}
 						if(endIndex >= 0) {
 							ptr += endIndex
-							return {nextIndex: ptr, content: code.substring(index, ptr - endIndex)}
+							return {nextIndex: ptr - endIndex, content: code.substring(index, ptr - endIndex)}
 						}
 					}
 					ptr += 1

@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material'
+import { PreferencesStorage } from '../../data/preference/preferences'
 import React from 'react'
 
 interface DarkModeProviderProps {
@@ -29,8 +30,13 @@ export function useDarkModeSetter() {
 export function DarkModeProvider({ defaultValue, children, ...other }: DarkModeProviderProps) {
 	const [ darkMode, setDarkMode ] = React.useState(defaultValue)
 
+	function handleSetDarkMode(state: boolean) {
+		setDarkMode(state)
+		PreferencesStorage.setItem('darkmode', state)
+	}
+
 	return (
-		<DarkModeContext.Provider value={[darkMode, setDarkMode]}>
+		<DarkModeContext.Provider value={[darkMode, handleSetDarkMode]}>
 			<ThemeProvider theme={createTheme({
 				palette: {
 					mode: darkMode ? 'dark' : 'light'

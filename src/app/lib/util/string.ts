@@ -66,3 +66,34 @@ export function multiReplace(haystack: string, pairs: [string, string][]) {
 
 	return ret
 }
+
+/**
+ * 字符串能否用作别名
+ * 规则：数字、字母、连字符，长度至少2
+ */
+export function isValidAlias(alias: string) {
+	return /^[0-9A-Za-z\-]+$/.test(alias) && alias.length >= 2
+}
+
+/**
+ * 寻找下标所在行
+ */
+export function findLineNumber(code: string, position: number) {
+	let lineNumber = 1
+	let ptr = 0
+	while(ptr < code.length) {
+		if(ptr >= position) {
+			return lineNumber
+		}
+		if(code[ptr] == '\r' && code[ptr + 1] == '\n') {
+			ptr += 2
+			lineNumber += 1
+		} else if(code[ptr] == '\r' || code[ptr] == '\n') {
+			ptr += 1
+			lineNumber += 1
+		} else {
+			ptr += 1
+		}
+	}
+	return lineNumber
+}

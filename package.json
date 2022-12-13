@@ -21,7 +21,12 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",
+    "@mui/lab": "^5.0.0-alpha.110",
     "@mui/material": "^5.10.14",
+    "ace-builds": "^1.13.2",
+    "localforage": "^1.10.0",
+    "material-ui-popup-state": "^4.1.0",
+    "react-ace": "^10.1.0",
     "react-icons": "^4.6.0",
     "react-jss": "^10.9.2"
   }

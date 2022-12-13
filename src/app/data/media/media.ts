@@ -1,9 +1,5 @@
 export interface Media {
 	/**
-	 * 系统分配的 ID
-	 */
-	gid: number
-	/**
 	 * 文件名（含扩展名）
 	 */
 	name: string
