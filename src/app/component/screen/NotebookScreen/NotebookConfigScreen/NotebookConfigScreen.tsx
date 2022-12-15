@@ -12,6 +12,7 @@ import { ScrollRoot } from '../../../TypoBox/ScrollRoot'
 import { NotebookStorage } from '../../../../data/notebook/notebook-entity'
 import { TypeConfirmAlert } from '../../../alert/TypeConfirmAlert'
 import { NotebookTagEditor } from './NotebookTagEditor'
+import { TestDOMRender } from '../../../../test/dom-render'
 
 interface NotebookConfigScreen {
 	getResetter: (reset: () => void) => void
@@ -147,6 +148,7 @@ export function NotebookConfigScreen({ getResetter } : NotebookConfigScreen) {
 				</Typography>
 				{/* 配置界面 */}
 				<ConfigScreen definition={configDefinition} getResetter={getResetter} />
+				{/* <TestDOMRender /> */}
 			</TypoBox>
 		</ScrollRoot>
 		{/* 删除确认对话框 */}

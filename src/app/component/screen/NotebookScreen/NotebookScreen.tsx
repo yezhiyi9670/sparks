@@ -21,7 +21,7 @@ export function NotebookNavbar({ value, showLabels, onChange, ...other }: Notebo
 	const LNG = useI18n()
 	
 	return <>
-		<BottomNavigation showLabels={showLabels} sx={{width: '100%', flexShrink: 0}} value={value} onChange={(_, newValue) => onChange && onChange(newValue)}>
+		<BottomNavigation showLabels={showLabels} sx={{width: '100%', flexShrink: 0, backgroundColor: 'transparent'}} value={value} onChange={(_, newValue) => onChange && onChange(newValue)}>
 			{subpages.items.map((item) => {
 				let label = LNG(subpages.i18nPrefix + item.key)
 				return <BottomNavigationAction sx={{

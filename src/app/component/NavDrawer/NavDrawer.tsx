@@ -186,7 +186,7 @@ function NotebookNavList({ currentItem, onChange, onDataUpdate, activeSelect, ..
 			<Divider />
 			<List>
 				<NavItem text={LNG('nav.drawer.notebook.new')} icon={<Icons.MdAdd />} onClick={() => setNewDialogOpen(true)} />
-				<NavItem text={LNG('nav.drawer.notebook.import')} icon={<Icons.MdImportContacts />} />
+				<NavItem disabled text={LNG('nav.drawer.notebook.import')} icon={<Icons.MdImportContacts />} />
 			</List>
 			{newDialog}
 		</>

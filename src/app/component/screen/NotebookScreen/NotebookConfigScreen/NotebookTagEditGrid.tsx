@@ -51,7 +51,7 @@ export function NotebookTagEditGridMobile({ editor, previewer }: NotebookTagEdit
 
 export function NotebookTagEditGridDesktop({ editor, previewer }: NotebookTagEditGridProps) {
 	return (
-		<Grid sx={{height: '100%', maxWidth: '1450px', margin: '0 auto'}} container>
+		<Grid sx={{height: '100%', maxWidth: '1550px', margin: '0 auto'}} container>
 			<Box sx={{height: '100%', flexGrow: 1, padding: '20px', paddingRight: '12px'}}>
 				<GridCard>
 					{editor}

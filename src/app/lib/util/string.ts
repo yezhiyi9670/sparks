@@ -76,6 +76,13 @@ export function isValidAlias(alias: string) {
 }
 
 /**
+ * 是否合法日期描述
+ */
+export function isValidDateStr(str: string) {
+	return !isNaN(new Date(str).getDate())
+}
+
+/**
  * 寻找下标所在行
  */
 export function findLineNumber(code: string, position: number) {

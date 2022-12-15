@@ -13,6 +13,7 @@ import { globalConfig } from '../config/config'
 import { PreferencesStorage } from './data/preference/preferences'
 import { BreakpointType, MobileProvider } from './lib/mobile/mobile'
 import { InitialWindowSizeProvider, useWindowSize } from './lib/util/responsive'
+import { SnackbarProvider } from './lib/snackbar/snackbar'
 
 localforage.config({
 	name: globalConfig.appPrefix
@@ -41,13 +42,15 @@ function AppRoot({ defaultDarkMode }: {defaultDarkMode: boolean}) {
 		<I18nProvider languageKey='zh_cn'>
 			<DarkModeProvider defaultValue={defaultDarkMode}>
 				<CssBaseline />
-				<InitialWindowSizeProvider value={[width, height]}>
-					<MobileProvider value={breakpointType}>
-						{ breakpointType == 'small' ?
-						<AppMobile /> :
-						<AppDesktop /> }
-					</MobileProvider>
-				</InitialWindowSizeProvider>
+				<SnackbarProvider>
+					<InitialWindowSizeProvider value={[width, height]}>
+						<MobileProvider value={breakpointType}>
+							{ breakpointType == 'small' ?
+							<AppMobile /> :
+							<AppDesktop /> }
+						</MobileProvider>
+					</InitialWindowSizeProvider>
+				</SnackbarProvider>
 			</DarkModeProvider>
 		</I18nProvider>
 	)

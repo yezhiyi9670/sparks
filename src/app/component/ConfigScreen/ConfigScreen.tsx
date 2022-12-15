@@ -287,7 +287,7 @@ interface ErrorTextProps {
 /**
  * 错误文本
  */
-function ErrorText({ text }: ErrorTextProps) {
+export function ErrorText({ text }: ErrorTextProps) {
 	const theme = useTheme()
 
 	return <>

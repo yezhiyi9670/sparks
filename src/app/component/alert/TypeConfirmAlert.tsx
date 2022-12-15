@@ -34,6 +34,7 @@ export function TypeConfirmAlert({ title, text, answer, onConfirm, getOpener }: 
 				}
 			]}
 			onConfirm={onConfirm}
+			hideValid
 		/>
 	)
 }

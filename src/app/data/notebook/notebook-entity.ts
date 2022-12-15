@@ -251,12 +251,23 @@ export class NotebookEntity implements Notebook {
 	 * 移除卡片
 	 */
 	deleteSpark(alias: string) {
-		console.log('Delete', alias)
 		const index = findIndexWithKey(this.sparks.entries, 'alias', alias)
 		if(index == -1) {
 			return false
 		}
 		this.sparks.entries.splice(index, 1)
+	}
+	/**
+	 * 写入卡片
+	 */
+	writeSpark(alias: string, entity: SparkEntity) {
+		const index = findIndexWithKey(this.sparks.entries, 'alias', alias)
+		if(index == -1) {
+			this.sparks.entries.push(entity.toData())
+		} else {
+			this.sparks.entries[index] = entity.toData()
+		}
+		this.sortSparks()
 	}
 	/**
 	 * 获取卡片实体
@@ -267,6 +278,16 @@ export class NotebookEntity implements Notebook {
 			return spark
 		}
 		return new SparkEntity(spark)
+	}
+	/**
+	 * 接受不存在的卡片
+	 */
+	acceptNonexistentSpark() {
+		const categoryTag = this.getCategoryTag()
+		if(!categoryTag) {
+			return false
+		}
+		return categoryTag.externValue !== null
 	}
 
 }

@@ -74,7 +74,7 @@ export function tagRenderText(tags: Tags, tagName: string, values: string[] | nu
 				return []
 			}
 			return delimiterText(tagDef.label, tagDef.delimiter, tagDef.values[valueName].label)
-		}).reduce((a, b) => a.concat(b))
+		}).reduce((a, b) => a.concat(b), [])
 		
 	} else {
 		let value = tagDef.defaultValue

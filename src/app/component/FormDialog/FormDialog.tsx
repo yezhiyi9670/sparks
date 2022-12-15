@@ -101,23 +101,28 @@ interface FormDialogProps {
 	onCancel?: () => void
 	onConfirm?: (values: {[id: string]: string}) => Promise<string | null>
 	getSetOpen?: (setOpen: (state: boolean) => void) => void
+	hideValid?: boolean
 }
 export function FormDialog({
 	title, preText, postText, cancelText, confirmText, fields,
-	onCancel, onConfirm, getSetOpen, ...other
+	onCancel, onConfirm, getSetOpen, hideValid, ...other
 }: FormDialogProps) {
 	const [ open, setOpen ] = React.useState(false)
 	const [ errorText, setErrorText ] = React.useState('')
-	let initialValues: {[id: string]: string} = {}
-	for(let item of fields) {
-		let initValue = ''
-		if(typeof item.initialValue == 'function') {
-			initValue = item.initialValue()
-		} else {
-			initValue = item.initialValue ?? ''
+	function getInitialValues() {
+		let initialValues: {[id: string]: string} = {}
+		for(let item of fields) {
+			let initValue = ''
+			if(typeof item.initialValue == 'function') {
+				initValue = item.initialValue()
+			} else {
+				initValue = item.initialValue ?? ''
+			}
+			initialValues[item.id] = initValue
 		}
-		initialValues[item.id] = initValue
+		return initialValues
 	}
+	let initialValues = getInitialValues()
 	const [ values, setValues ] = React.useState(initialValues)
 	const [ loading, setLoading ] = React.useState(false)
 
@@ -126,7 +131,7 @@ export function FormDialog({
 	if(getSetOpen) {
 		getSetOpen((state: boolean) => {
 			if(state == true) {
-				setValues(initialValues)
+				setValues(getInitialValues())
 				setLoading(false)
 				setErrorText('')
 			}
@@ -198,7 +203,7 @@ export function FormDialog({
 						multiline={item.multiline}
 						onChange={(val) => handleChange(item.id, val)}
 						onKeyUp={(evt: React.KeyboardEvent) => !item.multiline && handleKeyup(evt)}
-						displayValid
+						displayValid={!hideValid}
 						dethrottleValidation
 					/>
 				))}

@@ -14,10 +14,6 @@ import { NotebookTagEditGrid, NotebookTagEditGridDesktop } from './NotebookTagEd
 import { TestSpaceFill, TestSpaceFillTwo } from '../../../../test/SpaceFill'
 import { CompactToolbar, TitleToolbar, ToolbarDivider, ToolbarIconButton, ToolbarSymbolButton } from '../../../Toolbar/Toolbar'
 import AceEditor from 'react-ace'
-import 'ace-builds/src-noconflict/theme-tomorrow'
-import 'ace-builds/src-noconflict/theme-monokai'
-import 'ace-builds/src-noconflict/theme-tomorrow_night'
-import 'ace-builds/src-noconflict/mode-python'
 import { parseTags, TagParseResult } from '../../../../data/tag/tag-parser'
 import { createDethrottledApplier, dethrottle } from '../../../../lib/util/event'
 import { NotebookStorage } from '../../../../data/notebook/notebook-entity'
@@ -28,6 +24,9 @@ import { bindMenu, bindTrigger } from 'material-ui-popup-state/core'
 import Divider from '@mui/material/Divider'
 import { TagsPreview } from './TagsPreview'
 import { IssuesDisplay } from '../../../../data/code/issue/IssuesDisplay'
+import { ErrorText } from '../../../ConfigScreen/ConfigScreen'
+import { useSnackbar } from '../../../../lib/snackbar/snackbar'
+import { CodeEditor } from '../../../CodeEditor/CodeEditor'
 
 interface NotebookTagEditorProps {
 	getOpener: (opener: () => void) => void
@@ -45,6 +44,7 @@ export function NotebookTagEditor({ getOpener }: NotebookTagEditorProps) {
 	const theme = useTheme()
 	const wideEditor = useWideEditor()
 	const isMobile = useMobile()
+	const showSnackbar = useSnackbar()
 	
 	const [ open, setOpen ] = React.useState(false)
 	const [ code, setCode ] = React.useState(notebook.tags.code)
@@ -59,6 +59,7 @@ export function NotebookTagEditor({ getOpener }: NotebookTagEditorProps) {
 		setOpen(true)
 		setCode(notebook.tags.code)
 		setTagResult(parseTags(notebook.tags.code))
+		setLoading(false)
 	})
 
 	function handleClose() {
@@ -72,16 +73,22 @@ export function NotebookTagEditor({ getOpener }: NotebookTagEditorProps) {
 			evt.preventDefault()
 		}
 	}
+	const [ loading, setLoading ] = React.useState(false)
 	async function handleConfirm(doClose: boolean) {
+		setLoading(true)
 		notebook.tags.code = code
 		notebook.tags.tags = parseTags(code).result
 		try {
 			await NotebookStorage.write(notebook.alias, notebook.toData())
+			setLoading(false)
 			if(doClose) {
 				setOpen(false)
 			}
 			updateNotebook()
-		} catch(err: unknown) {}
+		} catch(err: unknown) {
+			setLoading(false)
+			showSnackbar('error', LNG('ui.local_write_error'))
+		}
 	}
 
 	function reparseTags(code: string) {
@@ -156,19 +163,11 @@ export function NotebookTagEditor({ getOpener }: NotebookTagEditorProps) {
 			<div style={{
 				height: '100%'
 			}} onKeyDown={handleKeyboard}>
-				<AceEditor
+				<CodeEditor
 					name='tag-edit'
 					mode='python'
-					theme={darkMode ? (wideEditor ? 'tomorrow_night' : 'twilight') : 'tomorrow'}
 					value={code}
-					height='100%'
-					width='100%'
-					fontSize={isMobile ? 14 : 16}
-					highlightActiveLine={false}
 					onChange={(value) => handleEditChange(value)}
-					setOptions={{
-						scrollPastEnd: true
-					}}
 					ref={editorRef}
 				/>
 			</div>
@@ -203,7 +202,7 @@ export function NotebookTagEditor({ getOpener }: NotebookTagEditorProps) {
 
 	return <>
 		<PopupScreen open={open}>
-			<PopupAppbar title={LNG('notebook.tag.title')} onClose={handleClose} onConfirm={() => handleConfirm(true)} />
+			<PopupAppbar title={LNG('notebook.tag.title')} onClose={handleClose} onConfirm={() => handleConfirm(true)} disabled={loading} />
 			<AppbarOutlet>
 				<NotebookTagEditGrid
 					editor={editor}

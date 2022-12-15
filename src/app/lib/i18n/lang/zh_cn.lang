@@ -189,10 +189,12 @@ notebook.tag.preview.none = 未定义任何标签。如果需要帮助或例子�
 notebook.tag.help.text = 选项式标签帮助
 notebook.tag.help.link = https://sparks-docs.wmsdf.cf/selective-tagging
 notebook.tag.preview.total = 共计 ${0} 组标签
+notebook.tag.preview.codename = 代号：${0}
 notebook.tag.preview.default_value = 默认值：${0}
 notebook.tag.preview.void = 空白
 notebook.tag.preview.default = 默认
 notebook.tag.preview.titleless = 无标题
+notebook.tag.preview.has_extern = 允许不存在的卡片
 notebook.tag.default.c.start_tag = 使用 tag/multitag/category 来开始一组标签
 notebook.tag.default.c.only_one_category = category 表示分类目录，仅能存在一组
 notebook.tag.default.c.multitag = multitag 标签组中多个值可以多选
@@ -209,6 +211,7 @@ notebook.tag.default.l.option = 选项 ${0}
 
 # Sparks screen
 spark.create.title = 新建卡片
+spark.create.title.copy = 复制卡片
 spark.create.tips.unsync = 卡片创建后将存储在浏览器中。你可以使用导入和导出功能来转移或备份数据。
 spark.create.tips.sync = 卡片创建后将立即同步到云端，但是仍然建议你通过导出的方式保留备份。
 spark.create.help.alias = 别名是卡片在此笔记本中的唯一标识符，可以使用字母、数字和连字符。建议使用与标题有关的字符串。
@@ -229,6 +232,61 @@ spark.delete.tips.1 = 确定删除卡片 ${0}？
 spark.delete.tips.2 = 你将永久失去此卡片（真的很久！）
 spark.delete.cancel = 取消
 spark.delete.confirm = 确定
+spark.tab.view = 查看
+spark.tab.split = 分割
+spark.tab.edit = 编辑
+spark.tab.props = 属性
+spark.section.title = 标题
+spark.section.edit = 编辑与预览
+spark.section.info = 基本信息
+spark.section.info.tags = 标签
+spark.section.info.ctime = 创建时间
+spark.section.alias = 别名
+spark.section.desc = 简介
+spark.section.tagging = 选项式标签
+spark.section.meta = 自定义字段
+spark.section.origin = 版本关系
+spark.help.desc = 简短的描述或副标题
+spark.error.alias = 别名不符合要求。
+spark.field.ctime = 创建时间
+spark.field.mtime = 修改时间
+spark.error.ctime = 时间格式无法解析。请尝试使用世界上大多数地区使用的格式。
+spark.tags.none = 没有标签
+spark.tags.editdef = 编辑标签定义文件
+spark.origin.prev = 上一个版本
+spark.origin.prev.caption = 选择上一个版本
+spark.origin.origin.caption = 选择灵感来源
+spark.origin.prev.none = 未选择卡片
+spark.origin.choose = 选择
+spark.origin.origin = 灵感来源
+spark.origin.add = 添加
+spark.sub.extern = 不能打开不存在的卡片
+spark.sub.opened = 此卡片已经在某处被打开
+
+# Custom fields editor
+cfe.add = 新增字段
+cfe.add.title = 新增字段
+cfe.add.field.name = 字段名
+cfe.add.cancel = 取消
+cfe.add.confirm = 确定
+cfe.add.error.exists = 此字段已经存在
+
+# Selective tagging editor
+ste.label.none = 无标题 (${0})
+ste.label.category = 分类目录 (${0})
+ste.value.none = 未指定
+ste.value.void = 空白
+ste.value.default = 默认值
+ste.value.default_category = 未分类
+
+# Origin edit
+ref.error.self = 不能选择自身作为上一个版本
+ref.error.self.origin = 不能选择自身作为来源
+ref.error.circle = 不能选择自身的后继作为上一个版本
+ref.error.selected = 此卡片已经选择过了
+ref.desc.nx = 不存在的卡片
+ref.nx.tips = 输入任意别名并确定（可以不存在）
+ref.nx.accept = 确定
 
 # Test
 test.template = 测试文本 #0 - ${0}, #1 - ${1}, #2 - ${2}; 转义符 ${$0}, ${$1}, ${$2}, ${$3}

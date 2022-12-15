@@ -42,6 +42,7 @@ export function TagsPreview({ tags, noneText, disableGutterTop }: TagsPreviewPro
 					}}>
 						{icon} {tag.label ? tag.label : LNG('notebook.tag.preview.titleless')}
 					</Typography>
+					{/* 标签预览 */}
 					<Typography variant='body2' component='div' gutterBottom>
 						{iterateMap(tag.values, (value) => {
 							if(value.type == 'void') {
@@ -57,7 +58,22 @@ export function TagsPreview({ tags, noneText, disableGutterTop }: TagsPreviewPro
 							</React.Fragment>
 						})}
 					</Typography>
-					{tag.type != 'multitag' && <Typography variant='body2' component='div' gutterBottom sx={{opacity: 0.6}} mt={-0.5}>
+					{/* 代号 */}
+					<Typography variant='body2' component='div' gutterBottom mt={-0.5} sx={{
+						opacity: 0.6,
+						whiteSpace: 'nowrap',
+						overflowX: 'hidden',
+						textOverflow: 'ellipsis'
+					}}>
+						{LNG('notebook.tag.preview.codename', tag.name)}
+					</Typography>
+					{/* 默认值 */}
+					{tag.type != 'multitag' && <Typography variant='body2' component='div' gutterBottom sx={{
+						opacity: 0.6,
+						whiteSpace: 'nowrap',
+						overflowX: 'hidden',
+						textOverflow: 'ellipsis'
+					}} mt={-0.5}>
 						{(() => {
 							let defaultValue = tag.values[tag.defaultValue]
 							let defaultLabel = ''
@@ -70,6 +86,15 @@ export function TagsPreview({ tags, noneText, disableGutterTop }: TagsPreviewPro
 							}
 							return LNG('notebook.tag.preview.default_value', defaultLabel)
 						})()}
+					</Typography>}
+					{/* 外源值 */}
+					{tag.type == 'category' && tag.externValue !== null && <Typography variant='body2' component='div' gutterBottom sx={{
+						opacity: 0.6,
+						whiteSpace: 'nowrap',
+						overflowX: 'hidden',
+						textOverflow: 'ellipsis'
+					}} mt={-0.5}>
+						{LNG('notebook.tag.preview.has_extern')}
 					</Typography>}
 				</React.Fragment>
 			})}
