@@ -1,4 +1,5 @@
 import React from 'react'
+import { zipArray } from '../util/array'
 import { randomToken } from '../util/random'
 import { multiReplace, replaceAll } from '../util/string'
 import lang_en_us from './lang/en_us'
@@ -106,4 +107,16 @@ export function getLanguageValue(languageKey: string, itemKey: string, ...args: 
 	str = str.replace(intermRegex, intermEnd)
 
 	return str
+}
+
+/**
+ * 获取可供选择的语言列表
+ */
+export function getAvailableLanguages() {
+	return {
+		'void': 'void (debug only)',
+		...zipArray(['zh_cn', 'en_us'].map((key) => {
+			return [ key, getLanguageValue(key, 'i18n.self_name') ]
+		}))
+	}
 }

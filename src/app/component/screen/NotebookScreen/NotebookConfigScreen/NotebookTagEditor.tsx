@@ -183,7 +183,7 @@ export function NotebookTagEditor({ getOpener }: NotebookTagEditorProps) {
 		</>}
 	</>
 
-	const previewer = <>
+	const previewer = React.useMemo(() => <>
 		{wideEditor && <TitleToolbar>
 			{LNG('notebook.tag.tab.preview')}
 		</TitleToolbar>}
@@ -198,7 +198,7 @@ export function NotebookTagEditor({ getOpener }: NotebookTagEditorProps) {
 				{LNG('notebook.tag.help.text')}
 			</Link>
 		</Box>
-	</>
+	</>, [notebook, tagResult])
 
 	return <>
 		<PopupScreen open={open}>

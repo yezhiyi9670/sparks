@@ -8,6 +8,7 @@ import 'ace-builds/src-noconflict/theme-tomorrow_night'
 import { useMobile } from '../../lib/mobile/mobile'
 import { useWideEditor } from '../../lib/util/responsive'
 import { useDarkMode } from '../../lib/darkmode/darkmode'
+import { width } from '@mui/system'
 
 interface CodeEditorProps {
 	name: string
@@ -16,6 +17,7 @@ interface CodeEditorProps {
 	onChange: (val: string) => void
 	ref: React.RefObject<AceEditor>
 	lineWrap?: boolean
+	widthFlag?: number
 }
 /**
  * 代码编辑器
@@ -25,6 +27,8 @@ export const CodeEditor = React.forwardRef((props: CodeEditorProps, ref: React.F
 	const wideEditor = useWideEditor()
 	const darkMode = useDarkMode()
 
+	let rd = (props.widthFlag ?? 0).toString()
+
 	return (
 		<AceEditor
 			name={props.name}
@@ -32,7 +36,7 @@ export const CodeEditor = React.forwardRef((props: CodeEditorProps, ref: React.F
 			theme={darkMode ? (wideEditor ? 'tomorrow_night' : 'twilight') : 'tomorrow'}
 			value={props.value}
 			height='100%'
-			width='100%'
+			width={`calc(100% - ${rd}px + ${rd}px)`}
 			fontSize={isMobile ? 14 : 16}
 			highlightActiveLine={false}
 			onChange={props.onChange}

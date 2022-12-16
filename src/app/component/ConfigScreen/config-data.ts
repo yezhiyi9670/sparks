@@ -30,7 +30,7 @@ interface ConfigOptionTextExtras {
 }
 interface ConfigOptionSelectExtras {
 	type: 'select'
-	choices: string[],
+	choices: {[_: string]: string},
 	initialValue: string
 	onChange?: ConfigActionCallback
 }
@@ -115,7 +115,7 @@ export function ConfigOptionText(key: string, initialValue: string, onChange: Co
 /**
  * 生成选择项
  */
-export function ConfigOptionSelect(key: string, initialValue: string, onChange: ConfigActionCallback, choices: string[], currentState?: string, noTips?: boolean, disabled?: boolean, tipToe?: string[]): ConfigOption {
+export function ConfigOptionSelect(key: string, initialValue: string, onChange: ConfigActionCallback, choices: {[_: string]: string}, currentState?: string, noTips?: boolean, disabled?: boolean, tipToe?: string[]): ConfigOption {
 	return { key, currentState, noTips, type: 'select',
 		initialValue,
 		onChange,

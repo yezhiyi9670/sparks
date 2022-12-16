@@ -14,6 +14,7 @@ import { PreferencesStorage } from './data/preference/preferences'
 import { BreakpointType, MobileProvider } from './lib/mobile/mobile'
 import { InitialWindowSizeProvider, useWindowSize } from './lib/util/responsive'
 import { SnackbarProvider } from './lib/snackbar/snackbar'
+import { SwitchableLanguageProvider } from './lib/i18n/SwitchableLanguage'
 
 localforage.config({
 	name: globalConfig.appPrefix
@@ -32,14 +33,20 @@ function determineBreakpoint(width: number) {
 	return breakpointType
 }
 
-function AppRoot({ defaultDarkMode }: {defaultDarkMode: boolean}) {
+function AppRoot({
+	defaultDarkMode,
+	defaultLanguage
+}: {
+	defaultDarkMode: boolean,
+	defaultLanguage: string
+}) {
 	// 这里界面布局的选择不采用响应式设计，因为很难避免窗口大小改变时丢失状态。
 	const width = window.innerWidth
 	const height = window.innerHeight
 	const breakpointType = determineBreakpoint(width)
 	
 	return (
-		<I18nProvider languageKey='zh_cn'>
+		<SwitchableLanguageProvider defaultValue={defaultLanguage}>
 			<DarkModeProvider defaultValue={defaultDarkMode}>
 				<CssBaseline />
 				<SnackbarProvider>
@@ -52,15 +59,31 @@ function AppRoot({ defaultDarkMode }: {defaultDarkMode: boolean}) {
 					</InitialWindowSizeProvider>
 				</SnackbarProvider>
 			</DarkModeProvider>
-		</I18nProvider>
+		</SwitchableLanguageProvider>
 	)
 }
 
+function getDefaultLanguage() {
+	switch(navigator.language) {
+		case 'zh-CN':
+			return 'zh_cn'
+		case 'en-US':
+			return 'en_us'
+		default:
+			return 'en_us'
+	}
+}
+
 PreferencesStorage.initialize().then(() => {
-	PreferencesStorage.getItem('darkmode', false).then((value) => {
-		root.render(
-			<AppRoot defaultDarkMode={value} />
-		)
+	PreferencesStorage.getItem('darkmode', false).then((darkModeValue) => {
+		PreferencesStorage.getItem('language', '').then((languageValue) => {
+			if(languageValue == '') {
+				languageValue = getDefaultLanguage()
+			}
+			root.render(
+				<AppRoot defaultDarkMode={darkModeValue} defaultLanguage={languageValue} />
+			)
+		})
 	})
 })
 

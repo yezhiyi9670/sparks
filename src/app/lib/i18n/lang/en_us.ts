@@ -289,6 +289,16 @@ export default {
 	"ref.nx.tips": "Input any alias and confirm (can be non-existent)",
 	"ref.nx.accept": "Accept",
 
+	// Markdown
+	"md.none$unsafe": "No article content. Enter the editor view to edit.",
+
+	// Preferences
+	"pref.title": "Preferencecs",
+	"pref.tips": "These are global settings on this device.",
+	"pref.ui": "User interface",
+	"pref.language.title": "Language",
+	"pref.language.tips": "Select the display language of the UI",
+
 	// Test
 	"test.template": "Test #0 - ${0}, #1 - ${1}, #2 - ${2}; raw ${$0}, ${$1}, ${$2}, ${$3}",
 }

@@ -288,7 +288,7 @@ export default function NavDrawerFrame({ open, children, onClose, ...other }: Na
 							<Tab label={LNG('nav.drawer.tab.settings')} value="settings" />
 						</Tabs>
 					</Box>
-					<Box sx={{overflowY: 'auto', flex: 1}}>
+					<Box sx={{overflowY: 'auto', overflowX: 'hidden', flex: 1}}>
 						{/* 笔记本列表 */}
 						{navTab == 'notebook' && <NotebookNavList currentItem={notebook} onChange={handleNotebookSelect} activeSelect={subpage == 'notebook'} onDataUpdate={() => undefined} />}
 						{/* 设置菜单 */}

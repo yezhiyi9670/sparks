@@ -288,5 +288,15 @@ ref.desc.nx = 不存在的卡片
 ref.nx.tips = 输入任意别名并确定（可以不存在）
 ref.nx.accept = 确定
 
+# Markdown
+md.none$unsafe = 没有正文内容。进入编辑器视图即可编辑。
+
+# Preferences
+pref.title = 偏好设置
+pref.tips = 这些是本设备上的全局设置。
+pref.ui = 用户界面
+pref.language.title = 语言
+pref.language.tips = 选择界面的显示语言
+
 # Test
 test.template = 测试文本 #0 - ${0}, #1 - ${1}, #2 - ${2}; 转义符 ${$0}, ${$1}, ${$2}, ${$3}

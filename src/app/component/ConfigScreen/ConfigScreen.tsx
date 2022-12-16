@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useI18n } from '../../lib/i18n/i18n'
 import { ConfigAction, ConfigOption, ConfigDefinition, ConfigSection, ConfigActionCallback } from './config-data'
-import { Button, Checkbox, FormControlLabel, useTheme } from '@mui/material'
+import { Button, Checkbox, FormControlLabel, MenuItem, Select, useTheme } from '@mui/material'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { CallbackRegistry } from '../../lib/util/event'
 import { FormTextField } from '../FormDialog/FormDialog'
+import { iterateMap } from '../../lib/util/array'
 
 type ConfigValues = {[_: string]: boolean | string}
 
@@ -22,6 +23,9 @@ function initValuesFromDef(definition: ConfigDefinition) {
 			}
 			if(option.type == 'switch') {
 				result[option.key] = option.initialValue ?? false
+			}
+			if(option.type == 'select') {
+				result[option.key] = option.initialValue
 			}
 		}
 	}
@@ -250,7 +254,18 @@ function ConfigFragOption({ i18nPrefix, option, getResetter, values, onUpdate }:
 					size='small'
 				/>
 			</>}
-			{/* TODO[unused]: 选择型配置项 */}
+			{/* 选择 */}
+			{option.type == 'select' && <>
+				<Select
+					value={values[option.key]}
+					size='small'
+					onChange={(evt) => updateValue(option.key, evt.target.value, option.onChange)}
+				>
+					{iterateMap(option.choices, (itemText, itemKey) => (
+						<MenuItem key={itemKey} value={itemKey}>{itemText}</MenuItem>
+					))}
+				</Select>
+			</>}
 		</Typography>
 	</>
 }

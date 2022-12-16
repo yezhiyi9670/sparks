@@ -25,6 +25,17 @@ export function findIndexWithKey<T>(arr: T[], key: string, value: any): number {
 }
 
 /**
+ * 根据键值对数组创建关联数组
+ */
+export function zipArray<T>(arr: [string, T][]): {[_: string]: T} {
+	let ret = {}
+	arr.forEach((item) => {
+		ret[item[0]] = item[1]
+	})
+	return ret
+}
+
+/**
  * 计量关联数组的大小
  */
 export function iterateSize(obj: {[_: string]: unknown}) {

@@ -31,6 +31,9 @@ import * as Icons from 'react-icons/md'
 import { useWideEditor } from '../../../../lib/util/responsive'
 import { DomRender } from '../../../../lib/DomRender/DomRender'
 import { parseMarkdownSafe } from '../../../../lib/markdown/markdown'
+import { useMethod } from '../../../../lib/util/hook'
+import { TestUpdateDetector } from '../../../../test/render-detector'
+import { useDarkMode } from '../../../../lib/darkmode/darkmode'
 
 interface SparkEditorProps {
 	getOpener: (opener: (spark: SparkEntity) => void) => void
@@ -48,6 +51,7 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 	const showSnackbar = useSnackbar()
 	const openedSparks = useSparkAliasStack()
 	const wideEditor = useWideEditor()
+	const darkMode = useDarkMode()
 
 	const [ open, setOpen ] = React.useState(false)
 	const [ renderOpen, setRenderOpen ] = React.useState(false)
@@ -94,7 +98,7 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 	let subEditor = renderOpen && spark && <SparkProvider value={subSpark}>
 		<SparkEditor getOpener={(func) => openSubEditor = func} />
 	</SparkProvider>
-	function openSubSpark(spark: SparkEntity) {
+	const openSubSpark = useMethod(function(spark: SparkEntity) {
 		if(spark.isFake) {
 			showSnackbar('warning', LNG('spark.sub.extern'))
 			return
@@ -105,11 +109,12 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 		}
 		setSubSpark(spark)
 		openSubEditor(spark)
-	}
+	})
 
 	/* ===== 标题编辑框 ===== */
 	const [ title, setTitle ] = React.useState('')
-	const titleEdit = <>
+	const handleTitleChange = useMethod((evt) => setTitle(evt.currentTarget.value))
+	const titleEdit = React.useMemo(() => <>
 		<TextField
 			id='title'
 			label={LNG('spark.section.title')}
@@ -117,28 +122,31 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 			placeholder={LNG('spark.untitled')}
 			value={title}
 			sx={{width: '100%'}}
-			onChange={(evt) => setTitle(evt.currentTarget.value)}
+			onChange={handleTitleChange}
 		/>
-	</>
+	</>, [notebook, spark, title])
 
 	/* ===== 别名编辑框 ===== */
 	const [ alias, setAlias ] = React.useState('')
-	const aliasEdit = <>
+	const aliasValidator = (val: string) => isValidAlias(val) ? null : LNG('spark.error.alias')
+	const aliasEdit = React.useMemo(() => <>
 		<FormTextField
 			id='alias'
 			label=''
 			size='small'
 			value={alias}
-			onChange={(val) => setAlias(val)}
-			validator={(val) => isValidAlias(val) ? null : LNG('spark.error.alias')}
+			onChange={setAlias}
+			validator={aliasValidator}
 			dethrottleValidation
 		/>
-	</>
+		<TestUpdateDetector label='SparkEditor alias' />
+	</>, [notebook, spark, alias])
 	acceptValues &&= isValidAlias(alias)
 
 	/* ===== 简介编辑框 ===== */
 	const [ desc, setDesc ] = React.useState('')
-	const descEdit = <>
+	const handleDescChange = useMethod((evt) => setDesc(evt.currentTarget.value))
+	const descEdit = React.useMemo(() => <>
 		<TextField
 			id='desc'
 			label=''
@@ -147,21 +155,24 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 			placeholder={LNG('spark.help.desc')}
 			value={desc}
 			sx={{width: '100%'}}
-			onChange={(evt) => setDesc(evt.currentTarget.value)}
+			onChange={handleDescChange}
 		/>
-	</>
+		<TestUpdateDetector label='SparkEditor desc' />
+	</>, [notebook, spark, desc])
 
 	/* ===== 自定义字段 ===== */
 	const [ meta, setMeta ] = React.useState<{[_: string]: string}>({})
-	const metaEdit = <>
+	const metaEdit = React.useMemo(() => <>
 		<CustommFieldsEdit value={meta} onChange={(val) => setMeta(val)} />
-	</>
+		<TestUpdateDetector label='SparkEditor meta' />
+	</>, [notebook, spark, meta])
 
 	/* ===== 基本信息 (实时更新“选项式标签”的内容) ===== */
 	const [ ctimeStr, setCtimeStr ] = React.useState('')
 	const [ mtimeStr, setMtimeStr ] = React.useState('')
 	const [ tagsData, setTagsData ] = React.useState<{[_: string]: string[]}>({})
-	const infoEdit = <>
+	const dateValidator = (val: string) => isValidDateStr(val) ? null : LNG('spark.error.ctime')
+	const infoEdit = React.useMemo(() => <>
 		<Typography variant='body1' component='div' gutterBottom>
 			{LNG('spark.section.info.tags')}
 		</Typography>
@@ -193,8 +204,8 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 				label={LNG('spark.field.ctime')}
 				size='small'
 				value={ctimeStr}
-				onChange={(val) => setCtimeStr(val)}
-				validator={(val) => isValidDateStr(val) ? null : LNG('spark.error.ctime')}
+				onChange={setCtimeStr}
+				validator={dateValidator}
 				sx={{width: '100%'}}
 				dethrottleValidation
 			/>
@@ -209,47 +220,52 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 				sx={{width: '100%'}}
 			/>
 		</Typography>
-	</>
+		<TestUpdateDetector label='SparkEditor info' />
+	</>, [notebook, spark, tagsData, ctimeStr, mtimeStr])
 	acceptValues &&= isValidDateStr(ctimeStr)
 
 	/* ===== 选项式标签 ===== */
 	let openTagEditor = () => void(0) as void
-	const tagsEdit = <>
+	const handleOpenTagEditor = useMethod(() => {
+		openTagEditor()
+	})
+	const tagsEdit = React.useMemo(() => <>
 		<TagsEditor notebook={notebook} value={tagsData} onChange={(val) => setTagsData(val)} />
 		<Typography variant='body1' component='div' pt={1}>
-			<Button variant='outlined' onClick={() => openTagEditor()} color='warning'>
+			<Button variant='outlined' onClick={handleOpenTagEditor} color='warning'>
 				{LNG('spark.tags.editdef')}
 			</Button>
 		</Typography>
 		<NotebookTagEditor getOpener={(func) => openTagEditor = func} />
-	</>
+		<TestUpdateDetector label='SparkEditor tags' />
+	</>, [notebook, tagsData])
 
 	/* ===== 来源 ===== */
 	const [ prevAlias, setPrevAlias ] = React.useState<string | null>(null)
 	const [ originList, setOriginList ] = React.useState<string[]>([])
-	const originEdit = <>
+	const originEdit = React.useMemo(() => <>
 		<Typography variant='body1' component='div' gutterBottom>
 			{LNG('spark.origin.prev')}
 		</Typography>
-		<PrevEdit notebook={notebook} spark={spark} value={prevAlias} onChange={(val) => setPrevAlias(val)} onSelect={(spark) => openSubSpark(spark)} />
+		<PrevEdit notebook={notebook} spark={spark} value={prevAlias} onChange={setPrevAlias} onSelect={openSubSpark} />
 		<Typography variant='body1' component='div' gutterBottom pt={2}>
 			{LNG('spark.origin.origin')}
 		</Typography>
-		<OriginEdit notebook={notebook} spark={spark} value={originList} onChange={(val) => setOriginList(val)} onSelect={(spark) => openSubSpark(spark)} />
-	</>
+		<OriginEdit notebook={notebook} spark={spark} value={originList} onChange={setOriginList} onSelect={openSubSpark} />
+		<TestUpdateDetector label='SparkEditor origin' />
+	</>, [notebook, spark, prevAlias, originList])
 
 	/* ===== Markdown 编辑窗口 ===== */
 	const [ mdContent, setMdContent ] = React.useState('')
 	const [ mdHtml, setMdHtml ] = React.useState('')
 	const [ splitType, setSplitType ] = React.useState<'edit' | 'preview' | 'split'>('preview')
 	const editorRef = React.createRef<AceEditor>()
-	function handleEditChange(val: string) {
+	const handleEditChange = useMethod(function(val: string) {
 		setMdContent(val)
-		console.log('Change')
-		// mdDethrottler.apply(() => {
-		// 	setMdHtml(parseMarkdownSafe(val))
-		// })()
-	}
+		mdDethrottler.apply(() => {
+			setMdHtml(parseMarkdownSafe(val))
+		})()
+	})
 	
 	const editorBox = (
 		<Box sx={{
@@ -263,24 +279,28 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 				name='spark-content'
 				mode='markdown'
 				value={mdContent}
-				onChange={(value) => handleEditChange(value)}
+				onChange={handleEditChange}
 				ref={editorRef}
+				widthFlag={{preview: 2, split: 3, edit: 1}[splitType]}
 				lineWrap
 			/>
 		</Box>
 	)
-	const previewBox = (
+	const previewBox = React.useMemo(() => 
 		<Box sx={{
 			flex: 'auto',
 			height: '100%',
 			overflowY: 'auto',
-			padding: '16px'
-		}}>
+			padding: wideEditor ? '24px' : '16px',
+			overflowX: 'hidden'
+		}} className={darkMode ? 'github-md-dark' : 'github-md-light'}>
 			<DomRender renderer={(ele) => {
-				ele.innerHTML = mdHtml
+				ele.innerHTML = mdHtml == '' ? `<i>${LNG('md.none$unsafe')}</i>` : mdHtml
+				ele.className = 'markdown-body'
 			}} />
+			<TestUpdateDetector label='SparkEditor preview' />
 		</Box>
-	)
+	, [darkMode, mdHtml])
 	const toolbarStuff = <></>
 	const toolbarBox = (
 		<CompactToolbar>
@@ -352,6 +372,7 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 				<Box sx={{
 					flex: 1,
 					height: '100%',
+					width: 0,
 					...(splitType == 'edit' && {
 						display: 'none'
 					})
