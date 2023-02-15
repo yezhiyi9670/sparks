@@ -62,7 +62,7 @@ export class CallbackRegistry<Func_t extends Function> {
 }
 
 /**
- * 使用仅有一次的 effect
+ * 使用仅有一次的 effect，并且可以在结束时清除
  */
 export function useOnceEffect(func: () => void) {
 	return React.useEffect(() => {
