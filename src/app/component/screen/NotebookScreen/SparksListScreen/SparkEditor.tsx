@@ -229,16 +229,18 @@ export function SparkEditor({ getOpener }: SparkEditorProps) {
 	const handleOpenTagEditor = useMethod(() => {
 		openTagEditor()
 	})
-	const tagsEdit = React.useMemo(() => <>
-		<TagsEditor notebook={notebook} value={tagsData} onChange={(val) => setTagsData(val)} />
-		<Typography variant='body1' component='div' pt={1}>
-			<Button variant='outlined' onClick={handleOpenTagEditor} color='warning'>
-				{LNG('spark.tags.editdef')}
-			</Button>
-		</Typography>
+	const tagsEdit = <>
+		{React.useMemo(() => <>
+			<TagsEditor notebook={notebook} value={tagsData} onChange={(val) => setTagsData(val)} />
+			<Typography variant='body1' component='div' pt={1}>
+				<Button variant='outlined' onClick={handleOpenTagEditor} color='warning'>
+					{LNG('spark.tags.editdef')}
+				</Button>
+			</Typography>
+			<TestUpdateDetector label='SparkEditor tags' />
+		</>, [notebook, tagsData])}
 		<NotebookTagEditor getOpener={(func) => openTagEditor = func} />
-		<TestUpdateDetector label='SparkEditor tags' />
-	</>, [notebook, tagsData])
+	</>
 
 	/* ===== 来源 ===== */
 	const [ prevAlias, setPrevAlias ] = React.useState<string | null>(null)
